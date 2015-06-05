@@ -14,6 +14,13 @@ This is the official documentation for the Bicephale 3D Printer Raspberry Pi Ima
 
     sudo dd if=/dev/rdiskID bs=1m | gzip > /path_to_image/bipi-xxx.xxx.gz
 
+## Infos
+
+Login and password are system wide
+
+**Login :** bmk
+**Password :** bicephale
+
 ## Licence
 
 Unless otherwise specified, everything in this repository is covered by the following licence:
