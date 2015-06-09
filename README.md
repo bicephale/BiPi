@@ -21,6 +21,12 @@ Login and password are system wide
 **Login :** bmk
 **Password :** bicephale
 
+## Network
+
+Netconnectd seems to override (or disable) native DHCP daemon, need to edit **/etc/network/interfaces** and set eth0 to
+
+    iface eth0 inet dhcp
+
 ## Licence
 
 Unless otherwise specified, everything in this repository is covered by the following licence:
