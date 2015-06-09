@@ -27,6 +27,11 @@ Netconnectd seems to override (or disable) native DHCP daemon, need to edit **/e
 
     iface eth0 inet dhcp
 
+    sudo nano /etc/dhcp/dhclient.conf
+
+Then set the **timeout** value to something convenient.
+
+
 ## Licence
 
 Unless otherwise specified, everything in this repository is covered by the following licence:
