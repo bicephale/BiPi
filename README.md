@@ -114,6 +114,7 @@ Misc
 -------------
 
 Autmatic startup MJPStreamer https://github.com/foosel/OctoPrint/issues/441
+PySerial 250000 baudrate https://github.com/foosel/OctoPrint/wiki/OctoPrint-support-for-250000-baud-rate-on-Raspbian
 
 
 
