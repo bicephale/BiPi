@@ -117,8 +117,10 @@ Autmatic startup MJPStreamer https://github.com/foosel/OctoPrint/issues/441
 
 PySerial 250000 baudrate https://github.com/foosel/OctoPrint/wiki/OctoPrint-support-for-250000-baud-rate-on-Raspbian
 
-Custom splash screen instructions http://www.edv-huber.com/index.php/problemloesungen/15-custom-splash-screen-for-raspberry-pi-raspbian
+Custom boot screen
+http://www.raspberry-projects.com/pi/pi-operating-systems/raspbian/custom-boot-up-screen
 
+Custom splash screen instructions (alternate) http://www.edv-huber.com/index.php/problemloesungen/15-custom-splash-screen-for-raspberry-pi-raspbian
 
 ## Licence
 
