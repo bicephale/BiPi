@@ -2,18 +2,6 @@
 
 This is the official documentation for the Bicephale 3D Printer Raspberry Pi Image.
 
-## Install
-
-### OSX
-
-    gzip -dc /path_to_image/bipi-xxx.xxx.gz | sudo dd of=/dev/rdiskID bs=1m
-
-## Backup
-
-### OSX
-
-    sudo dd if=/dev/rdiskID bs=1m | gzip > /path_to_image/bipi-xxx.xxx.gz
-
 ## Infos
 
 Login and password are system wide
@@ -54,7 +42,7 @@ During the first boot, you'll have to do some basic steps in the **raspi-config*
 > - Enable camera
 > - Enable boot to console
 > - Set GPU memory to **128mb** (otherwise, camera won't work)
-> - Change hostname to bipi
+> - Change hostname to bicephale
 
 Sometimes, you could have an error message during the first boot wich is :
 
@@ -93,14 +81,14 @@ Use HOSTAPD from adafruit https://learn.adafruit.com/setting-up-a-raspberry-pi-a
 create hostapd config file in /etc/hostapd/hostapd.conf (JUST FOR TESTING PURPOSES)
 
 > interface=wlan0
-driver=rtl871xdrv
-ssid=BiPiAP
-channel=3
-wpa=3
-wpa_passphrase=bicephale              
-wpa_key_mgmt=WPA-PSK
-wpa_pairwise=TKIP CCMP
-rsn_pairwise=CCMP
+> driver=rtl871xdrv
+> ssid=Bicephale
+> channel=3
+> wpa=3
+> wpa_passphrase=bicephale              
+> wpa_key_mgmt=WPA-PSK
+> wpa_pairwise=TKIP CCMP
+> rsn_pairwise=CCMP
 
 https://github.com/foosel/netconnectd
 
