@@ -77,6 +77,8 @@ In the part relative to setup scripts please change in /etc/default/octoprint th
 Netconnectd setup
 -------------
 
+Warning : just use HOSTAPD from ADAFRUIT (wget amazon...) TODO
+
 Use HOSTAPD from adafruit https://learn.adafruit.com/setting-up-a-raspberry-pi-as-a-wifi-access-point/install-software
 create hostapd config file in /etc/hostapd/hostapd.conf (JUST FOR TESTING PURPOSES)
 
