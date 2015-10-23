@@ -60,14 +60,14 @@ Then, add this line **before** elevator=deadline
 
 Then change the classic Pi username with the command below. Be carefull, you'll have to do this with a screen, it won't work over SSH.
 
-> exec sudo -s
-> cd /
-> usermod -l bmk -d /home/bmk -m pi
-> reboot
+    exec sudo -s
+    cd /
+    usermod -l bmk -d /home/bmk -m pi
+    reboot
 
 Change the default password, by purpose, we'll use a convention everywhere, username **bmk** password **bicephale** Use the command below to change the password :
 
-> passwd
+    passwd
 
 OctoPrint setup
 -------------
@@ -81,27 +81,27 @@ Netconnectd setup
 
 Install netconnectd following this guide https://github.com/foosel/netconnectd follow the first steps (till install netconnectd) to prepare the system. Once it's done, please update HOSTAPD from Adafruit (https://learn.adafruit.com/setting-up-a-raspberry-pi-as-a-wifi-access-point/install-software) with the steps below :
 
-> wget http://adafruit-download.s3.amazonaws.com/adafruit_hostapd_14128.zip
-> unzip adafruit_hostapd_14128.zip
-> sudo mv /usr/sbin/hostapd /usr/sbin/hostapd.ORIG
-> sudo mv hostapd /usr/sbin
-> sudo chmod 755 /usr/sbin/hostapd
+    wget http://adafruit-download.s3.amazonaws.com/adafruit_hostapd_14128.zip
+    unzip adafruit_hostapd_14128.zip
+    sudo mv /usr/sbin/hostapd /usr/sbin/hostapd.ORIG
+    sudo mv hostapd /usr/sbin
+    sudo chmod 755 /usr/sbin/hostapd
 
 Then, to test if it's working, create hostapd config file in /tmp/hostapd.conf (JUST FOR TESTING PURPOSES)
 
-> interface=wlan0
-> driver=rtl871xdrv
-> ssid=Bicephale
-> channel=3
-> wpa=3
-> wpa_passphrase=bicephale              
-> wpa_key_mgmt=WPA-PSK
-> wpa_pairwise=TKIP CCMP
-> rsn_pairwise=CCMP
+    interface=wlan0
+    driver=rtl871xdrv
+    ssid=Bicephale
+    channel=3
+    wpa=3
+    wpa_passphrase=bicephale              
+    wpa_key_mgmt=WPA-PSK
+    wpa_pairwise=TKIP CCMP
+    rsn_pairwise=CCMP
 
 And run the command below :
 
-> sudo /usr/sbin/hostapd /tmp/hostapd.conf
+    sudo /usr/sbin/hostapd /tmp/hostapd.conf
 
 You should have an AP up and running. Then, install the netconnect daemon
 
