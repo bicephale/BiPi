@@ -46,18 +46,6 @@ During the first boot, you'll have to do some basic steps in the **raspi-config*
 > - Set GPU memory to **128mb** (otherwise, camera won't work)
 > - Change hostname to bicephale
 
-Sometimes, you could have an error message during the first boot wich is :
-
-> Kernel lacks cgroups or memory controller not avaiable, not starting cgroups
-
-Here is a solution to fix it :
-
-> sudo nano /boot/cmdline.txt
-
-Then, add this line **before** elevator=deadline
-
-> cgroup_enable=memory
-
 Then change the classic Pi username with the command below. Be carefull, you'll have to do this with a screen, it won't work over SSH.
 
     exec sudo -s
@@ -74,12 +62,67 @@ OctoPrint setup
 
 Please setup Octoprint using this guide https://github.com/foosel/OctoPrint/wiki/Setup-on-a-Raspberry-Pi-running-Raspbian be carefull to use the Bicephale's OctoPrint fork repo instead of the classic one.
 
-In the part relative to setup scripts please change in /etc/default/octoprint the user to bmk (instead of Pi) and executable path to DAEMON=/home/bmk/OctoPrint/venv/bin/octoprint
+In the part relative to setup scripts please change in **/etc/default/octoprint** the user to **bmk** (instead of Pi) and executable path to **DAEMON=/home/bmk/OctoPrint/venv/bin/octoprint**
+
+    sudo nano /etc/default/octoprint
 
 Netconnectd setup
 -------------
 
-Install netconnectd following this guide https://github.com/foosel/netconnectd follow the first steps (till install netconnectd) to prepare the system. Once it's done, please update HOSTAPD from Adafruit (https://learn.adafruit.com/setting-up-a-raspberry-pi-as-a-wifi-access-point/install-software) with the steps below :
+Install netconnectd following this guide https://github.com/foosel/netconnectd
+
+## Setup
+
+### Prepare the system
+
+Install the hostapd, dnsmasq, logrotate and rfkill packages:
+
+    sudo apt-get install hostapd dnsmasq logrotate rfkill
+
+----
+
+**Note for people updating**: Netconnectd now depends on the ``rfkill`` tool to be installed on the target system as
+well, the above package installation instructions have since been updated to reflect this.
+
+----
+
+We don't want neither `hostapd` nor `dnsmasq` to automatically startup, so make sure their automatic start on boot is 
+disabled:
+
+    sudo update-rc.d -f hostapd remove
+    sudo update-rc.d -f dnsmasq remove
+
+You can verify that this worked by checking that there are no files left in `/etc/rc*.d` referencing those two services,
+so the following to commands should return `0`:
+
+    ls /etc/rc*.d | grep hostapd | wc -l
+    ls /etc/rc*.d | grep dnsmasq | wc -l
+
+If you are running NetworkManager (default for Ubuntu or other desktop linux distributions, usually not the case for 
+Raspbian), make sure to disable its own `dnsmasq` by editing `/etc/NetworkManager/NetworkManager.conf` and commenting
+out the line that says `dns=dnsmasq`, it should look something like this afterwards (note the `#` in front of the
+`dns` line):
+
+    [main]
+    plugins=ifupdown,keyfile,ofono
+    #dns=dnsmasq
+    
+    no-auto-default=00:22:68:1F:83:AF,
+    
+    [ifupdown]
+    managed=false
+
+You'll also need to modify `/etc/dhcp/dhclient.conf` to include a timeout setting, e.g.
+
+    timeout 60;
+
+Otherwise -- due to a limitation of how Debian/Ubuntu currently parses Wifi configurations in `/etc/network/interfaces` 
+-- netconnectd won't be able to detect when it couldn't connect to your configured local wifi and will never start the 
+access point mode. The value above will mean that it will take a maximum of 60sec before netconnectd will be notified 
+by the system that the connection was unsuccessful -- you might want to lower that value even more but keep in mind that 
+your wifi's DHCP server has to respond within that timeout for the connection to be considered successful.
+
+Once it's done, please update HOSTAPD from Adafruit (https://learn.adafruit.com/setting-up-a-raspberry-pi-as-a-wifi-access-point/install-software) with the steps below (**depending of your WiFi driver !**) :
 
     wget http://adafruit-download.s3.amazonaws.com/adafruit_hostapd_14128.zip
     unzip adafruit_hostapd_14128.zip
@@ -107,7 +150,42 @@ You should have an AP up and running. Then, install the netconnect daemon
 
 https://github.com/foosel/netconnectd
 
-Then edit /etc/netconnectd.yaml change AP name and driver name to rtl871xdrv
+### Install netconnectd
+
+It's finally time to install `netconnectd`:
+
+    cd
+    git clone https://github.com/foosel/netconnectd
+    cd netconnectd
+    sudo python setup.py install
+    sudo python setup.py install_extras
+
+Modify `/etc/netconnectd.yaml` as necessary:
+ 
+  * Change the passphrase/psk for your access point
+  * If necessary change the interface names of your wifi and wired network interfaces dont forget to change the wifi driver
+  * If your machine is **not** running NetworkManager, set `wifi > free` to `false`
+  * if you **don't** want to reset the wifi interface in case of any detected errors on the driver level, set
+    `wifi > kill` to `false`
+ 
+Last, start netconnectd:
+
+    sudo service netconnectd start
+
+Verify that the logfile looks ok-ish:
+
+    less /var/log/netconnectd.log
+
+and that it's indeed running (error handling of the start up script still needs to be improved):
+
+    netconnectcli status
+
+Congratulations, `netconnectd` is now running and should detect when you don't have any connection available, starting the AP mode to change that.
+
+If everything looks alright, configure the service so that it starts at boot up:
+
+    sudo update-rc.d netconnectd defaults 98
+
 
 Then install plugin https://github.com/OctoPrint/OctoPrint-Netconnectd and make sure that you previously source /venv/bin/activate before installing (to be in the same OctoPrint's Python environement)
 
