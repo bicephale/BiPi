@@ -29,10 +29,12 @@ If you want to cook your very own version of **BiPi** follow the basic steps bel
 
 ----------
 
-Raspbian Setup
+Minibian Setup
 -------------
 
-First, you'll have to setup Raspbian on your Raspberry Pi 2 following this guide : https://www.raspberrypi.org/documentation/installation/installing-images/
+First, you'll have to setup Minibian on your Raspberry Pi 2. Download & install it to the SD card.
+
+Follow this guide for the initial setup http://www.htpcguides.com/lightweight-raspbian-distro-minibian-initial-setup/
 
 During the first boot, you'll have to do some basic steps in the **raspi-config** utility
 
@@ -77,10 +79,15 @@ In the part relative to setup scripts please change in /etc/default/octoprint th
 Netconnectd setup
 -------------
 
-Warning : just use HOSTAPD from ADAFRUIT (wget amazon...) TODO
+Install netconnectd following this guide https://github.com/foosel/netconnectd follow the first steps (till install netconnectd) to prepare the system. Once it's done, please update HOSTAPD from Adafruit (https://learn.adafruit.com/setting-up-a-raspberry-pi-as-a-wifi-access-point/install-software) with the steps below :
 
-Use HOSTAPD from adafruit https://learn.adafruit.com/setting-up-a-raspberry-pi-as-a-wifi-access-point/install-software
-create hostapd config file in /etc/hostapd/hostapd.conf (JUST FOR TESTING PURPOSES)
+> wget http://adafruit-download.s3.amazonaws.com/adafruit_hostapd_14128.zip
+> unzip adafruit_hostapd_14128.zip
+> sudo mv /usr/sbin/hostapd /usr/sbin/hostapd.ORIG
+> sudo mv hostapd /usr/sbin
+> sudo chmod 755 /usr/sbin/hostapd
+
+Then, to test if it's working, create hostapd config file in /tmp/hostapd.conf (JUST FOR TESTING PURPOSES)
 
 > interface=wlan0
 > driver=rtl871xdrv
@@ -91,6 +98,12 @@ create hostapd config file in /etc/hostapd/hostapd.conf (JUST FOR TESTING PURPOS
 > wpa_key_mgmt=WPA-PSK
 > wpa_pairwise=TKIP CCMP
 > rsn_pairwise=CCMP
+
+And run the command below :
+
+> sudo /usr/sbin/hostapd /tmp/hostapd.conf
+
+You should have an AP up and running. Then, install the netconnect daemon
 
 https://github.com/foosel/netconnectd
 
