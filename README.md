@@ -2,13 +2,6 @@
 
 This is the official documentation for the Bicephale 3D Printer Raspberry Pi Image.
 
-## Infos
-
-Login and password are system wide
-
-**Login :** bmk
-**Password :** bicephale
-
 ## Network
 
 Netconnectd seems to override (or disable) native DHCP daemon, need to edit **/etc/network/interfaces** and set eth0 to
